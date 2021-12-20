@@ -5,12 +5,12 @@ void show_infos(int** rooms,char names[6][25]);
 void empty_room(int** rooms,char names[6][25]);
 int main()
 {
-    int room1[3]={1,1,1};int room2[3]={1,2,0};int room3[3]={2,3,0};int room4[3]={2,4,0};int room5[3]={3,5,0};int room6[3]={3,6,0};
-    char names[6][25]={"mert keskin"};
+    int room1[3]={1,1,0};int room2[3]={1,2,0};int room3[3]={2,3,0};int room4[3]={2,4,0};int room5[3]={3,5,0};int room6[3]={3,6,0};
+    char names[6][25];
     int* rooms[6]={room1,room2,room3,room4,room5,room6};
     char islem;
     do{
-        printf("-----------------\nCikmak icin q\nBilgileri görmek icin b\nRezervasyon icin r\nOda bosaltmak icin s : ");
+        printf("-----------------\nCikmak icin q\nBilgileri gormek icin b\nRezervasyon icin r\nOda bosaltmak icin s : ");
         scanf(" %c",&islem);
         if(islem =='b')
             show_infos(rooms,names);
@@ -27,7 +27,7 @@ void book(int** rooms,char names[6][25]){
     printf("Kac kisilik oda ? : ");
     scanf(" %d",&n);
     if(n>3){
-        printf("Bu oteldeki odala maksimum 3 kisi almaktadir\n");
+        printf("Bu oteldeki odalar maksimum 3 kisi almaktadir\n");
     }
     else{
         int i = 0;
@@ -64,15 +64,22 @@ void show_infos(int** rooms,char names[6][25]){
     while((n2!='q')&&(n2!='Q')){
         printf("Ayrintili bilgi icin oda numarasi giriniz : ");
         scanf(" %d",&n);
-        printf("Oda sahibinin adi %s\nOdadaki kisi sayisi %d\n",names[n-1],rooms[n-1][0]);
+        if(n<7){
+            printf("--------------------\n");
+            printf("Oda sahibinin adi %s\nOdadaki kisi sayisi %d\n",names[n-1],rooms[n-1][0]);
+            printf("--------------------\n");
+        }
+        else
+            printf("Bu numaraya sahip bir oda bulunmamaktadir\n");
         printf("Devam icin d cickmak icin q : ");
         scanf(" %c",&n2);
     }
 }
 void empty_room(int** rooms,char names[6][25]){
     int i;
-    printf("Bosaltmak isediginiz odayi giriniz");
+    printf("Bosaltmak isediginiz odanin numarasini giriniz : ");
     scanf(" %d",&i);
     rooms[i-1][2]=0;
     strcpy(names[i-1],"");
+    printf("%d nolu oda bosaltildi\n",i);
 }
