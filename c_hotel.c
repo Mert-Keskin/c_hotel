@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <string.h>
-void book(int** rooms,char names[6][25]);
+void rent(int** rooms,char names[6][25]);
 void show_infos(int** rooms,char names[6][25]);
 void empty_room(int** rooms,char names[6][25]);
 int main()
-{
-    int room1[4]={1,1,0,0};int room2[4]={1,2,0,0};int room3[4]={2,3,0,0};
-    int room4[4]={2,4,0,0};int room5[4]={3,5,0,0};int room6[4]={3,6,0,0};
-    char names[6][25];
-    int* rooms[6]={room1,room2,room3,room4,room5,room6};
+{                                                                         // Oteldeki 6 otda icin arrayler ayrılır.Indexler sırasıyla
+    int room1[4]={1,1,0,0};int room2[4]={1,2,0,0};int room3[4]={2,3,0,0}; // 0:kisi kapesitesi, 1:oda no, 2:0 ise oda bos 1 ise dolu
+    int room4[4]={2,4,0,0};int room5[4]={3,5,0,0};int room6[4]={3,6,0,0}; // 3.Musterini gunluk olarak odedigi para miktarı. 
+    char names[6][25];  //Müsterilerin isimlerini depolayacak degisken.                               
+    int* rooms[6]={room1,room2,room3,room4,room5,room6};    //Odaları isaret eden pointer
     char islem;
-    do{
-        printf("--------------------\nCikmak icin q\nBilgileri gormek icin b\nRezervasyon icin r\nOda bosaltmak icin s : ");
+    do{     //Programın ana dongusu do while kısmıdır.Fonksiyonlar burada cagrılır
+        printf("--------Menu--------\nCikmak icin q\nBilgileri gormek icin b\nOda kiralamak icin icin k\nOda bosaltmak icin s : ");
         scanf(" %c",&islem);
         if(islem =='b')
             show_infos(rooms,names);
-        else if (islem == 'r')
-            book(rooms,names);
+        else if (islem == 'k')
+            rent(rooms,names);
         else if (islem == 's')
             empty_room(rooms,names);
         else{
@@ -28,22 +28,23 @@ int main()
     printf("Program sonlaniyor ...");
     return 0;
 }
-void book(int** rooms,char names[6][25]){
+void rent(int** rooms,char names[6][25]){
     int n;
     printf("Kac kisilik oda ? : ");
     scanf(" %d",&n);
     if(n>3){
-        printf("Bu oteldeki odalar maksimum 3 kisi almaktadir\n");
+        printf("Bu oteldeki odalar maksimum 3 kisi almaktadir !!!\n");
     }
+    else if(n<=0)
+        printf("Girdigin sayiya dikkat et.\n");
     else{
         int i = 0;
-        int flag = 0;
+        int flag = 0; //Kiralama islemi basarılı olup olmadıgını kontrol etmek icin.
         char name[25];
-        for(i;i<6;i++){
-            if((rooms[i][0]==n)&&(rooms[i][2]==0)){
+        for(i;i<6;i++){ //bu dongu sırayla odalara bakar
+            if((rooms[i][0]==n)&&(rooms[i][2]==0)){ // ilk kosul istenilen kisi sayısı eslesiyormu 2.kosul ise oda dolumu bosmu kontrol eder.
                 flag = 1;
-                char vip;
-                switch(n){
+                switch(n){ //Odadaki kisi kapesitesine gore fiyatlandırma yapilir.
                     case 1:
                         rooms[i][3]=100;
                         break;
@@ -55,16 +56,18 @@ void book(int** rooms,char names[6][25]){
                         break;
                 }
                 printf("Oda sahibinin ismi ? : ");
-                scanf(" %s",name);
+                scanf(" ");     // Bug dan oturu bu satır eklendi.
+                fgets(name,sizeof(name),stdin);
                 strcpy(names[i],name);
-                rooms[i][2]=1;
+                rooms[i][2]=1;  //Odayı artık kiraladıgımız icin 2. index 1 e esitlendi. 
+                char vip;
                 printf("Vip hizmet alincak mi? evet icin 'e' hayir icin 'h' : ");
                 scanf(" %c",&vip);
-                if(vip=='e')
+                if(vip=='e')    //Vip hizmet kabul edildiyse fiyata 20 $ daha eklenir.
                     rooms[i][3] +=20;                
                 printf("--------------------\n");
                 printf("Islem basariyla gerceklesmistir.\n");
-                printf("Oda sahibinin adi : %s\nOda numarasi : %d\nOdadaki kisi sayisi : %d\nGunluk tutar : %d\n",names[i],rooms[i][1],rooms[i][0],rooms[i][3]);
+                printf("Oda sahibinin adi : %sOda numarasi : %d\nOdadaki kisi sayisi : %d\nGunluk tutar : %d $\n",names[i],rooms[i][1],rooms[i][0],rooms[i][3]);
                 break;
             }
         }
@@ -75,16 +78,16 @@ void book(int** rooms,char names[6][25]){
 }
 void show_infos(int** rooms,char names[6][25]){
     int i;
-    int arr[3] = {0,0,0};
+    int arr[3] = {0,0,0};  //1 2 ve 3 kisilik odalardan kacar tanesinin bos kaldigini depolayacagimiz array.
     int income=0;
     for(i=0;i<6;i++){
-        income+=rooms[i][3];
-        if(rooms[i][2]==0){
-            arr[rooms[i][0]-1]++;
+        income+=rooms[i][3];    //her bir odadaki kira miktarı income değerine eklenir.
+        if(rooms[i][2]==0){     
+            arr[rooms[i][0]-1]++;   //eger oda bos ise +1
         }
     }
     printf("--------------------\n");
-    printf("1 kisilik bos oda sayisi : %d\n2 kisilik bos oda sayisi : %d\n3 kisilik bos oda sayisi : %d\nToplam gelir : %d\n",arr[0],arr[1],arr[2],income);
+    printf("1 kisilik bos oda sayisi : %d\n2 kisilik bos oda sayisi : %d\n3 kisilik bos oda sayisi : %d\nToplam gelir : %d $\n",arr[0],arr[1],arr[2],income);
     int n;
     char n2;
     printf("Devam edip ayrintili bilgi gormek icin d cickmak icin q : ");
@@ -94,7 +97,7 @@ void show_infos(int** rooms,char names[6][25]){
         scanf(" %d",&n);
         if((n<7)&&(rooms[n-1][2]==1)){
             printf("--------------------\n");
-            printf("Oda sahibinin adi : %s\nOda numarasi : %d\nOdadaki kisi sayisi : %d\nGunluk tutar : %d\n",names[n-1],rooms[n-1][1],rooms[n-1][0],rooms[n-1][3]);
+            printf("Oda sahibinin adi : %sOda numarasi : %d\nOdadaki kisi sayisi : %d\nGunluk tutar : %d $\n",names[n-1],rooms[n-1][1],rooms[n-1][0],rooms[n-1][3]);
             printf("--------------------\n");
         }
         else if((n<7)&&(names[n-1][2]==0))
