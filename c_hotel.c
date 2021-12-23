@@ -1,19 +1,20 @@
-/*Bu program otele gelen müsterilerin bilglilerinin alir düzenler ve gerekli bilgilere 
+/*Bu program otele gelen musterilerin bilglilerinin alir duzenler ve gerekli bilgilere 
 ulasmamizi saglayarak otelin yonetimini kolaylastiri.*/
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 void rent(int** rooms,char names[6][25]);
 void show_infos(int** rooms,char names[6][25]);
 void empty_room(int** rooms,char names[6][25]);
 int main()
-{                                                                         // Oteldeki 6 otda icin arrayler ayrılır.Indexler sırasıyla
+{                                                                         // Oteldeki 6 otda icin arrayler ayrilir.Indexler sirasiyla
     int room1[4]={1,1,0,0};int room2[4]={1,2,0,0};int room3[4]={2,3,0,0}; // 0:kisi kapesitesi, 1:oda no, 2:bos ise 0 dolu ise 1
     int room4[4]={2,4,0,0};int room5[4]={3,5,0,0};int room6[4]={3,6,0,0}; // 3.Musterini gunluk olarak odedigi para miktari. 
-    char names[6][25];  //Müsterilerin isimlerini depolayacak degisken.                               
+    char names[6][25];  //Musterilerin isimlerini depolayacak degisken.                               
     int* rooms[6]={room1,room2,room3,room4,room5,room6};    //Odalari isaret eden pointer
     char islem;
     printf("Bilgilendirme : \nBu otelde 1 2 ve 3 kisilik odalardan 2 ser tane olmak uzere 6 oda vardir.\n");
-    do{     //Programın ana dongusu do while kismidır.Fonksiyonlar burada cagrilir
+    do{     //Programin ana dongusu do while kismidır.Fonksiyonlar burada cagrilir
         printf("--------Menu--------\nCikmak icin q\nBilgileri gormek icin b\nOda kiralamak icin icin k\nOda bosaltmak icin s : ");
         scanf(" %c",&islem);
         if(islem =='b')
@@ -30,6 +31,7 @@ int main()
     }
     while(islem !='q');
     printf("Program sonlaniyor ...");
+                sleep(3);   //Program aniden kapanmasin ,son outputlarda okunsun diye 3 saniye bekleme suresi.
     return 0;
 }
 void rent(int** rooms,char names[6][25]){
@@ -70,7 +72,7 @@ void rent(int** rooms,char names[6][25]){
                         break;
                 }
                 printf("Oda sahibinin ismi ? : ");
-                scanf(" ");     // Bug dan oturu bu satır eklendi.
+                scanf(" ");     // Bug dan oturu bu satir eklendi.
                 fgets(name,sizeof(name),stdin);
                 strcpy(names[i],name);
                 rooms[i][2]=1;  //Odayı artık kiraladıgımız icin 2. index 1 e esitlendi. 
