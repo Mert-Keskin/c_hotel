@@ -19,6 +19,10 @@ int main()
             book(rooms,names);
         else if (islem == 's')
             empty_room(rooms,names);
+        else{
+            printf("Hatali islem.\n");
+            islem='q';
+        }
     }
     while(islem !='q');
     printf("Program sonlaniyor ...");
@@ -85,7 +89,7 @@ void show_infos(int** rooms,char names[6][25]){
     char n2;
     printf("Devam edip ayrintili bilgi gormek icin d cickmak icin q : ");
     scanf(" %c",&n2);
-    while((n2!='q')&&(n2!='Q')){
+    while((n2=='d')||(n2=='D')){
         printf("Ayrintili bilgi icin oda numarasi giriniz : ");
         scanf(" %d",&n);
         if((n<7)&&(rooms[n-1][2]==1)){
@@ -97,7 +101,7 @@ void show_infos(int** rooms,char names[6][25]){
             printf("Bu oda bos\n");
         else
             printf("Bu numaraya sahip bir oda bulunmamaktadir\n");
-        printf("Devam icin d cickmak icin q : ");
+        printf("Devam icin d geri donmek icin q : ");
         scanf(" %c",&n2);
     }
 }
@@ -105,7 +109,12 @@ void empty_room(int** rooms,char names[6][25]){
     int i;
     printf("Bosaltmak isediginiz odanin numarasini giriniz : ");
     scanf(" %d",&i);
-    rooms[i-1][2]=0;
-    strcpy(names[i-1],"");
-    printf("%d nolu oda bosaltildi\n",i);
+    if(rooms[i-1][2]==0)
+        printf("Bu oda zaten bos.\n");
+    else{
+        rooms[i-1][2]=0;
+        strcpy(names[i-1],"");
+        rooms[i-1][3]=0;
+        printf("%d nolu oda bosaltildi\n",i);
+    }
 }
